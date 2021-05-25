@@ -32,7 +32,7 @@ const Home = (props) => {
           </p>
           <ul className="text-sm pl-6">
             <li className=""><Link to="/admin/products/">product</Link></li>
-            <li><Link to="/admin/category">Category</Link></li>
+            <li><Link to="/admin/categories/">Category</Link></li>
             <li>order</li>
           </ul>
         </div>

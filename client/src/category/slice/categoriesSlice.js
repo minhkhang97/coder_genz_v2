@@ -20,10 +20,12 @@ const categoriesSlice = createSlice({
     setActiveInit: (state, action) => {
       //action.payload.categories = [{_id, name}, ....];
       const categoriesId = action.payload.categories.map((el) => el._id);
+      console.log(categoriesId);
       categoriesId.map((id) => {
         const index = state.categories
           .map((el) => el._id)
           .indexOf(id);
+          console.log(index);
         state.categories[index].isActive = !state.categories[index].isActive;
       });
     },

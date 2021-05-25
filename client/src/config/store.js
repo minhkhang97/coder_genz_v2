@@ -3,6 +3,7 @@ import userReducer from '../guards/userSlice';
 import productReducer from '../product/slice/productSlice';
 import productsReducer from '../product/slice/productsSlice';
 import categoriesReducer from '../category/slice/categoriesSlice';
+import categoryReducer from '../category/slice/categorySlice';
 
 const store = configureStore({
     reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
         productReducer,
         categoriesReducer,
         productsReducer,
+        categoryReducer,
     }
 });
 

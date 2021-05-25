@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import shortid from "shortid";
-import { createProduct } from "../../api/productApi";
+import { createProduct, updateProductById } from "../../api/productApi";
 
 export const postProduct = createAsyncThunk(
   "/products/post",
@@ -14,6 +14,13 @@ export const postProduct = createAsyncThunk(
   }
 );
 
+export const updateProduct = createAsyncThunk('/product/update', async (product) => {
+  let temp = {...product};
+  temp.categories = product.categories.map(el => el._id);
+  const result = await updateProductById(temp);
+  return result;
+})
+
 export const fetchProductById = createAsyncThunk(
   "/products/read",
   async (params, thunk) => {
@@ -25,12 +32,13 @@ export const fetchProductById = createAsyncThunk(
 );
 
 const initProduct = {
+  _id: '',
   id: shortid.generate(),
   name: "",
   price: 0,
   discount: 0,
   isPublic: true,
-  status: { code: "001", mess: "" },
+  status: { code: "001", mess: "còn hàng" },
   introduce: "",
   description: "",
   properties: [],
@@ -192,6 +200,9 @@ const productSlice = createSlice({
   },
 
   extraReducers: {
+    [updateProduct.fulfilled]: (state, action) => {
+      console.log('cap nhat san pham thanh cong');
+    },
     [postProduct.fulfilled]: (state, action) => {
       console.log("them san pham thanh cong");
     },

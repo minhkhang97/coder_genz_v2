@@ -41,6 +41,7 @@ const initProduct = {
   quantity: 0,
   create_at: Date.now(),
   categories: [],
+  isActive: true,
 };
 
 const productsSlice = createSlice({
@@ -57,6 +58,24 @@ const productsSlice = createSlice({
     setPrice: (state, action) => {
       state.products[0].price = action.payload.price;
     },
+    setActiveForProduct: (state, action) => {
+      const index = state.products
+        .map((el) => el._id)
+        .indexOf(action.payload.id);
+      //console.log(index, state.categories[index]);
+      state.products[index].isActive = !state.products[index].isActive;
+    },
+    setActiveInitForProduct: (state, action) => {
+      console.log(action.payload.products);
+      // const productsId = action.payload.products.map((el) => el._id);
+      // console.log(productsId);
+      // productsId.map((id) => {
+      //   const index = state.products
+      //     .map((el) => el._id)
+      //     .indexOf(id);
+      //   return state.products[index].isActive = !state.products[index].isActive;
+      // });
+    }
   },
   extraReducers: {
     [fetchProducts.pending]: (state) => {
@@ -64,7 +83,10 @@ const productsSlice = createSlice({
     },
     [fetchProducts.fulfilled]: (state, action) => {
       state.status = "success";
-      state.products = action.payload;
+      const products = [
+        ...action.payload.map((el) => ({ ...el, isActive: true })),
+      ];
+      state.products = products;
     },
     [fetchProducts.rejected]: (state) => {
       state.status = "failed";
@@ -82,6 +104,6 @@ const productsSlice = createSlice({
   },
 });
 
-export const {addProduct, setName, setPrice} = productsSlice.actions;
+export const {addProduct, setName, setPrice, setActiveForProduct, setActiveInitForProduct} = productsSlice.actions;
 
 export default productsSlice.reducer;

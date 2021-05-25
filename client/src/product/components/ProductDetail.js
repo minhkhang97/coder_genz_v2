@@ -27,8 +27,8 @@ const ProductDetail = ({ product, categories }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setActiveInit({categories}));
-  }, [])
+    dispatch(setActiveInit({ categories: product.categories }));
+  }, []);
 
   const [search, setSearch] = useState("");
 

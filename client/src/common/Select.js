@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
 const Select = ({ label, list, onChange, value }) => {
@@ -10,9 +10,10 @@ const Select = ({ label, list, onChange, value }) => {
       <select
         className="p-2 border border-solid border-gray-400 rounded-xl outline-none"
         onChange={(e) => {onChange(e.target.value)}}
+        defaultValue={value}
       >
-        {list.map((el) => (
-          <option value={el.code} label={el.mess} defaultChecked={value === el.code && true} >{el.mess}</option>
+        {list.map((el, index) => (
+          <option key={index} value={el.code} label={el.mess}>{el.mess}</option>
         ))}
       </select>
     </div>

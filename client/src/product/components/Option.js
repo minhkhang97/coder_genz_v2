@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { setValueForOption, removeOption } from "../slice/productSlice";
 
-const Option = ({ optionId, propertyId }) => {
+const Option = ({ optionId, propertyId, value }) => {
   const dispatch = useDispatch();
   return (
     <div
@@ -11,6 +11,7 @@ const Option = ({ optionId, propertyId }) => {
     >
       <input
         type="text"
+        value={value}
         placeholder="nhập giá trị"
         className="w-11/12 py-2 px-4 bg-white-50 rounded-md text-gray-900 outline-none"
         onChange={(e) =>

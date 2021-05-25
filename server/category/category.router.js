@@ -15,6 +15,12 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/:id', async (req, res) => {
+    const {id} = req.params;
+    const product = await findOneCategory(id);
+    return res.status(200).json(product);
+})
+
 router.post('/', passport.authenticate('jwt', {session: false}), async (req, res) => {
     try{
         const category = await createCategory(req.body, String(req.user._id));

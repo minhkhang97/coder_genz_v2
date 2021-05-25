@@ -21,3 +21,10 @@ export const getOneProduct =  async (idProduct) => {
     const product = await apiHandler.get(url);
     return product;
 }
+
+export const updateProductById = async (product) => {
+    const url = `/products/${product._id}`;
+    const productResult = await apiHandler.put(url, product);
+    return productResult;
+
+}
