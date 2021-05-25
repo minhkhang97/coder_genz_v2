@@ -32,7 +32,6 @@ export const fetchProductById = createAsyncThunk(
 );
 
 const initProduct = {
-  _id: '',
   id: shortid.generate(),
   name: "",
   price: 0,
@@ -46,6 +45,7 @@ const initProduct = {
   quantity: 0,
   create_at: Date.now(),
   categories: [],
+  isActive: true,
 };
 
 const productSlice = createSlice({

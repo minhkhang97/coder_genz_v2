@@ -27,31 +27,10 @@ const initialState = {
   status: "idle",
 };
 
-const initProduct = {
-  id: shortid.generate(),
-  name: "",
-  price: 0,
-  discount: 0,
-  isPublic: true,
-  status: { code: "001", msg: "" },
-  introduce: "",
-  description: "",
-  properties: [],
-  photos: [],
-  quantity: 0,
-  create_at: Date.now(),
-  categories: [],
-  isActive: true,
-};
-
 const productsSlice = createSlice({
   name: "products",
   initialState,
   reducers: {
-    addProduct: (state) => {
-      state.products = [];
-      state.products.push(initProduct);
-    },
     setName: (state, action) => {
       state.products[0].name = action.payload.name;
     },
@@ -67,14 +46,14 @@ const productsSlice = createSlice({
     },
     setActiveInitForProduct: (state, action) => {
       console.log(action.payload.products);
-      // const productsId = action.payload.products.map((el) => el._id);
-      // console.log(productsId);
-      // productsId.map((id) => {
-      //   const index = state.products
-      //     .map((el) => el._id)
-      //     .indexOf(id);
-      //   return state.products[index].isActive = !state.products[index].isActive;
-      // });
+      const productsId = action.payload.products.map((el) => el._id);
+      console.log(productsId);
+      productsId.map((id) => {
+        const index = state.products
+          .map((el) => el._id)
+          .indexOf(id);
+        return state.products[index].isActive = !state.products[index].isActive;
+      });
     }
   },
   extraReducers: {
@@ -104,6 +83,6 @@ const productsSlice = createSlice({
   },
 });
 
-export const {addProduct, setName, setPrice, setActiveForProduct, setActiveInitForProduct} = productsSlice.actions;
+export const {setName, setPrice, setActiveForProduct, setActiveInitForProduct} = productsSlice.actions;
 
 export default productsSlice.reducer;

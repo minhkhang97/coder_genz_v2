@@ -48,6 +48,7 @@ const createProduct = async (product, user) => {
   // if(product.status.code === '001') product.status.mess = 'còn hàng';
   // if(product.status.code === '002') product.status.mess = 'hết hàng';
   // if(product.status.code === '003') product.status.mess = 'ngừng bán';
+  console.log(product);
 
   const productNew = new Product({ ...product, user });
 

@@ -33,8 +33,8 @@ const createCategory = async (category, user) => {
   const categoryResult = await categoryNew.save();
 
   await Product.updateMany(
-    { _id: { $in: categoryResult.product } },
-    { $push: { category: categoryNew._id } }
+    { _id: { $in: categoryResult.products } },
+    { $push: { categories: categoryNew._id } }
   );
 
   return categoryResult;
@@ -54,18 +54,17 @@ const updateCategory = async (idCategory, category) => {
 
   //update category: thay doi category
   //console.log(categoryAfterUpdate);
-  const test = await Product.find({ _id: categoryBeforeUpdate.product });
   //console.log(test);
   //xoa san pham trong category cu
   //updateMany tra ve query
   await Product.updateMany(
-    { _id: categoryBeforeUpdate.product },
-    { $pull: { category: categoryAfterUpdate._id } }
+    { _id: categoryBeforeUpdate.products },
+    { $pull: { categories: categoryAfterUpdate._id } }
   );
   //them san pham vao category moi
   await Product.updateMany(
-    { _id: categoryAfterUpdate.product },
-    { $push: { category: categoryAfterUpdate._id } }
+    { _id: categoryAfterUpdate.products },
+    { $push: { categories: categoryAfterUpdate._id } }
   );
 
   return categoryAfterUpdate;

@@ -30,11 +30,7 @@ router.post('/', passport.authenticate('jwt', {session: false}), async (req, res
     }
 });
 
-router.put('/:id', param('id').exists().withMessage('vui long nhap id'),  async (req, res) => {
-    const errors = validationResult(req);
-    if(!errors.isEmpty()){
-        return res.status(401).json({msg: errors});
-    }
+router.put('/:id',  async (req, res) => {
     const {id} = req.params;
     try{
         let category = await findOneCategory(id);

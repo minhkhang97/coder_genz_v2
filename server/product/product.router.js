@@ -34,11 +34,12 @@ router.get('/:id', async (req, res) => {
 //check gia tri truyen len trc
 router.post('/', passport.authenticate('jwt', {session: false}), async (req, res) => {
     //kiem tra dau vao, xem cac gia tri co ton tai khong
+    console.log(req.user);
     try{
         const product = await createProduct(req.body, String(req.user._id));
         return res.status(200).json(product);
     }catch (err){
-        return res.status(401).json({msg: err});
+        return res.status(400).json({msg: err});
     }
 });
 

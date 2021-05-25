@@ -10,9 +10,7 @@ export const getAllProducts = async () => {
 
 export const createProduct = async (product) => {
     const url = '/products';
-    console.log(product);
     const data = await apiHandler.post(url, product);
-    console.log(data);
     return data;
 }
 
