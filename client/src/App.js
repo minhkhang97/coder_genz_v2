@@ -11,6 +11,8 @@ import CreateProductPage from "./product/pages/CreateProductPage";
 import PrivateRouter from './guards/PrivateRouter';
 import DashBoard from './guards/DashBoard';
 import Login from './common/Login';
+import DatMonPage from "./product/pages/DatMonPage";
+import ThanhToanPage from "./product/pages/ThanhToanPage";
 
 const App = () => {
   return (
@@ -18,6 +20,8 @@ const App = () => {
       <Switch>
         <Route path="/login" component={Login} />
         <PrivateRouter path="/admin" component={DashBoard} />
+        <Route path="/dat-mon" component={DatMonPage} />
+        <Route path="/thanh-toan" component={ThanhToanPage} />
       </Switch>
     </Router>
   );

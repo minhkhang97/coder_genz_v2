@@ -26,7 +26,7 @@ const categoriesSlice = createSlice({
           .map((el) => el._id)
           .indexOf(id);
           console.log(index);
-        state.categories[index].isActive = !state.categories[index].isActive;
+        return state.categories[index].isActive = !state.categories[index].isActive;
       });
     },
     setActive: (state, action) => {

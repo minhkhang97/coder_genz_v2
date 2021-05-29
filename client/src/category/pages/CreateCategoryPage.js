@@ -22,9 +22,9 @@ const CreateCategoryPage = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setInitCategory());
     (async () => {
       await dispatch(fetchProducts());
+      dispatch(setInitCategory());
     })();
   }, []);
   if (status === "loading") return <div>loading</div>;

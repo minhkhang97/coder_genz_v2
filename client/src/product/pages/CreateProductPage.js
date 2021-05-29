@@ -4,7 +4,10 @@ import ProductDetail from "../components/ProductDetail";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { fetchAllCategories } from "../../category/slice/categoriesSlice";
+import {
+  fetchAllCategories,
+  setActiveInit,
+} from "../../category/slice/categoriesSlice";
 import { setInitialState, postProduct } from "../slice/productSlice";
 
 const CreateProductPage = (props) => {
@@ -17,8 +20,10 @@ const CreateProductPage = (props) => {
     dispatch(setInitialState());
     (async () => {
       await dispatch(fetchAllCategories());
+
+      dispatch(setActiveInit({ categories: product.categories }));
     })();
-  }, [dispatch]);
+  }, []);
 
   if (status === "loading") return <div>loading</div>;
   if (status === "failed") return <div>failed</div>;

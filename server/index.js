@@ -9,7 +9,7 @@ const cors = require('cors');
 
 const port = process.env.PORT | 5000;
 
-mongoose.connect(process.env.DB_LOCAL, {
+mongoose.connect(process.env.DB_HOST, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false,
@@ -28,6 +28,7 @@ mongoose.connection.on("open", function () {
 const usersRouter = require("./users/users.router");
 const productsRouter = require('./product/product.router');
 const categoryRouter = require('./category/category.router');
+const orderRouter = require('./order/order.router');
 
 const app = express();
 
@@ -40,6 +41,7 @@ app.use(cors());
 app.use("/auth/admin", usersRouter);
 app.use('/products', productsRouter);
 app.use('/categories', categoryRouter);
+app.use('/order', orderRouter);
 
 app.get("/", (req, res) => {
   console.log("sadjhgashj");

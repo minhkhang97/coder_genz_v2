@@ -33,7 +33,7 @@ const sendMail = (data, email) => {
 }
 
 const createLinkActive = (email) => {
-  return "http://localhost:5000/admin/auth/config-email?email=" + email;
+  return "http://localhost:5000/auth/admin/config-email?email=" + email;
 }
 
 const hashCode = async (string) => {

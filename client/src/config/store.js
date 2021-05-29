@@ -4,6 +4,8 @@ import productReducer from '../product/slice/productSlice';
 import productsReducer from '../product/slice/productsSlice';
 import categoriesReducer from '../category/slice/categoriesSlice';
 import categoryReducer from '../category/slice/categorySlice';
+import orderDetailReducer from '../product/slice/orderDetailSlice';
+import cartReducer from '../product/slice/cartSlice';
 
 const store = configureStore({
     reducer: {
@@ -12,6 +14,8 @@ const store = configureStore({
         categoriesReducer,
         productsReducer,
         categoryReducer,
+        orderDetailReducer,
+        cartReducer,
     }
 });
 
