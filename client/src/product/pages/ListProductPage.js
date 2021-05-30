@@ -72,7 +72,7 @@ const ListProductPage = (props) => {
               </span>
               <span>
                 <p class="inline bg-indigo-700 text-white text-xs font-semibold px-2 py-1 rounded-lg">
-                  còn hàng
+                  {el.status.mess}
                 </p>
               </span>
             </div>

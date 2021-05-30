@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { fetchProductById, updateProduct } from "../slice/productSlice";
 import ProductDetail from "../components/ProductDetail";
-import { fetchAllCategories } from "../../category/slice/categoriesSlice";
+import { fetchAllCategories, setActiveInit } from "../../category/slice/categoriesSlice";
 
 const UpdateProductPage = () => {
   const { status, product } = useSelector((state) => state.productReducer);
@@ -15,6 +15,7 @@ const UpdateProductPage = () => {
     (async () => {
       await dispatch(fetchProductById({ id }));
       await dispatch(fetchAllCategories());
+      dispatch(setActiveInit({categories: product.categories}))
     })();
   }, [id]);
 

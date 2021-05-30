@@ -4,7 +4,8 @@ import { getAllCategories } from "../../api/categoryApi";
 export const fetchAllCategories = createAsyncThunk(
   "/category/read",
   async () => {
-    const categories = await getAllCategories();
+    let categories = await getAllCategories();
+    categories = categories.map(el => ({...el, isActive: true}));
     return categories;
   }
 );
@@ -43,10 +44,8 @@ const categoriesSlice = createSlice({
       state.status = "loading";
     },
     [fetchAllCategories.fulfilled]: (state, action) => {
-      const categories = [
-        ...action.payload.map((el) => ({ ...el, isActive: true })),
-      ];
-      state.categories = categories;
+      console.log(action.payload);
+      state.categories = action.payload;
       state.status = "success";
     },
 

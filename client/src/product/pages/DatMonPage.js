@@ -3,7 +3,12 @@ import { useSelector, useDispatch } from "react-redux";
 import shortid from "shortid";
 import { fetchAllCategories } from "../../category/slice/categoriesSlice";
 import Cart from "../components/Cart";
-import { addCart, minusAmountOrder, plusAmountOrder, removeOrder } from "../slice/cartSlice";
+import {
+  addCart,
+  minusAmountOrder,
+  plusAmountOrder,
+  removeOrder,
+} from "../slice/cartSlice";
 import {
   minusAmountValueOfProperty,
   plusAmountValueOfProperty,
@@ -23,11 +28,7 @@ const DatMonPage = () => {
   const [showProduct, setShowProduct] = useState(false);
   const dispatch = useDispatch();
 
-  const [error, setError] = useState("");
-
-  setTimeout(() => {
-    if (error) setError("");
-  }, 2000);
+  const [error, setError] = useState([]);
 
   const check = (propertyId) => {
     const totalQuantity = orderDetail.properties
@@ -47,14 +48,9 @@ const DatMonPage = () => {
     return isAmount > 0;
   };
 
-
-
-  const datMon = (orderDetail) => {
-    console.log(orderDetail.properties.map((el) => el.options));
-    orderDetail.properties
-      .map((el) => el.options)
-      .map((el) => el.length === 0 && setError("sadasd"));
-  };
+  setTimeout(() => {
+    if (error) setError([]);
+  }, 4000);
 
   useEffect(() => {
     (async () => {
@@ -70,7 +66,12 @@ const DatMonPage = () => {
         <div className="w-2/12">
           <ul className="bg-red-100 rounded-md text-gray-800 uppercase px-3 py-4">
             {categories.map((category, index) => (
-              <li key={index} className="rounded-md py-1 px-3 my-1 hover:bg-red-700 hover:text-gray-50">{category.name}</li>
+              <li
+                key={index}
+                className="rounded-md py-1 px-3 my-1 hover:bg-red-700 hover:text-gray-50"
+              >
+                {category.name}
+              </li>
             ))}
           </ul>
         </div>
@@ -92,7 +93,7 @@ const DatMonPage = () => {
                         setInitOrderDetail({
                           _id: el._id,
                           name: el.name,
-                          price: el.price, 
+                          price: el.price,
                           properties: el.properties.map((property) => ({
                             id: property.id,
                             name: property.name,
@@ -132,9 +133,10 @@ const DatMonPage = () => {
           <Cart cart={cart} />
         </div>
       </div>
-      {error && <div>vui long dien day du thong tin</div>}
+      
       {showProduct && (
         <div className="border border-solid border-gray-50 shadow-lg rounded-lg fixed top-4 w-3/4 bg-white">
+          {error.length > 0 && <div className="py-1 px-2 bg-red-700 text-white inline-block">vui long dien day du thong tin</div>}
           <div className="flex py-4 px-6">
             <div className="w-2/3 uppercase pr-6">
               <h4 className="text-2xl font-semibold text-gray-900">
@@ -237,10 +239,16 @@ const DatMonPage = () => {
           <button
             className="bg-red-700 text-white py-2 px-4 uppercase font-semibold"
             onClick={() => {
-              datMon(orderDetail);
-              if (!error) {
+              console.log(orderDetail.properties);
+              const temp = orderDetail.properties
+                .map((el) => el.options)
+                .map((el) => el.length);
+              setError([...error, "hgsadhas"]);
+              console.log(temp);
+              console.log(error);
+              if (!temp.includes(0)) {
                 dispatch(
-                  addCart({ ...orderDetail, amount: 1, id: shortid.generate()})
+                  addCart({ ...orderDetail, amount: 1, id: shortid.generate() })
                 );
                 setShowProduct(false);
               }

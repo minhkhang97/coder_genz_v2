@@ -26,9 +26,9 @@ import { setActive, setActiveInit } from "../../category/slice/categoriesSlice";
 const ProductDetail = ({ product, categories }) => {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(setActiveInit({ categories: product.categories }));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(setActiveInit({ categories: product.categories }));
+  // }, [dispatch, product]);
 
   const [search, setSearch] = useState("");
 

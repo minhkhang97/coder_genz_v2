@@ -45,14 +45,16 @@ const productsSlice = createSlice({
       state.products[index].isActive = !state.products[index].isActive;
     },
     setActiveInitForProduct: (state, action) => {
-      console.log(action.payload.products);
+      //cap nhat cho tat ca ve lai true
+      const temp = state.products.map(el => ({...el, isActive: true}));
+      state.products = temp;
       const productsId = action.payload.products.map((el) => el._id);
-      console.log(productsId);
       productsId.map((id) => {
         const index = state.products
           .map((el) => el._id)
           .indexOf(id);
-        return state.products[index].isActive = !state.products[index].isActive;
+        state.products[index].isActive = !state.products[index]?.isActive;
+        return id;
       });
     }
   },

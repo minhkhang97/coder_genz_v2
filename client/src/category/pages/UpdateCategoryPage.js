@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router";
-import { fetchProducts } from "../../product/slice/productsSlice";
+import { fetchProducts, setActiveInitForProduct } from "../../product/slice/productsSlice";
 import CategoryDetail from "../components/CategoryDetail";
 import { fetchOneCategory, updateCategory } from "../slice/categorySlice";
 
@@ -17,8 +17,9 @@ const UpdateCategoryPage = () => {
     (async () => {
       await dispatch(fetchOneCategory(id));
       await dispatch(fetchProducts());
+      dispatch(setActiveInitForProduct({products: categoryReducer.category.products}))
     })();
-  }, []);
+  }, [id]);
 
   if (
     productsReducer.status === "loading" ||
