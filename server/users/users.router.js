@@ -24,11 +24,22 @@ router.get(
   }
 );
 
+const myValidationResult = validationResult.withDefaults({
+  formatter: error => {
+    return {
+      mess: error.msg,
+    };
+  },
+});
+
 //login
 router.post("/login", loginValid, async (req, res) => {
-  const errors = validationResult(req);
+  const errors = myValidationResult(req);
+
   if (!errors.isEmpty()) {
-    return res.status(400).json(errors.mapped());
+    const t = errors.array();
+    console.log(t);
+    return res.status(200).json({error: errors.array().map(el => el.mess)});
   }
   //kiem tra xem email da ton tai chua
   const { email, password } = req.body;
@@ -36,19 +47,20 @@ router.post("/login", loginValid, async (req, res) => {
 
   //email chua tao tai khaon
   if (!user) {
-    return res.status(400).json({ error: "tai khoan email khong dung" });
+    return res.status(200).json({ error: ["tai khoan email khong dung"] });
   }
 
   //email chua kich hoat tai khaon
   if (user && user.isActive === false)
-    return res.status(400).json({
-      error: "tai khoan chua duoc kich hoat",
+    return res.status(200).json({
+      error: ["tai khoan chua duoc kich hoat"],
       linkActive: createLinkActive(email),
     });
 
+  const temp = await bcrypt.compare(password, user.password);
   //da kich hoat tai khoan nhung sai mat khau
-  if (!bcrypt.compare(password, user.password))
-    return res.status(401).json({ msg: "mat khau khong chinh xac" });
+  if (!temp)
+    return res.status(200).json({ error: ["mat khau khong chinh xac"] });
 
   //dang nhap thanh cong
   //tao token

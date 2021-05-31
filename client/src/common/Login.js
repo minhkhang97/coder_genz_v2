@@ -7,6 +7,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const history = useHistory();
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState([]);
   return (
     <div className="bg-indigo-200 h-screen flex">
       <div className="bg-white w-1/2 py-6 px-6 m-auto rounded-md justify-center items-center shadow-md">
@@ -17,9 +18,12 @@ const Login = () => {
             //await dispatch(fetchLogin({email, password}));
             const data = await login(email, password);
             console.log(data);
-            localStorage.setItem("accessToken", data.token.accessToken);
-            history.push('/admin');
-
+            if (data.error) {
+              setErrors(data.error);
+            } else {
+              localStorage.setItem("accessToken", data.token.accessToken);
+              history.push("/admin");
+            }
           }}
         >
           <div className="flex flex-col my-1">
@@ -40,8 +44,20 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
+          <ul>
+            {errors.map((el, index) => (
+              <li key={index} className="text-red-700 capitalize text-sm">
+                {el}
+              </li>
+            ))}
+          </ul>
           <div className="text-center mt-4">
-            <button type="submit" className="bg-indigo-700 py-2 px-8 rounded-md shadow-md text-white uppercase font-semibold">login</button>
+            <button
+              type="submit"
+              className="bg-indigo-700 py-2 px-8 rounded-md shadow-md text-white uppercase font-semibold"
+            >
+              login
+            </button>
           </div>
         </form>
       </div>
