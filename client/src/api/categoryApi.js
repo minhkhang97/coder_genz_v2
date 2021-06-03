@@ -27,3 +27,9 @@ export const updateCategoryById = async (category) => {
     const categoryResult = await apiHandler.put(url, temp);
     return categoryResult;
 }
+
+export const deleteCategoryById = async (id) => {
+    const url = `/categories/${id}`;
+    const res = await apiHandler.delete(url);
+    return res;
+}

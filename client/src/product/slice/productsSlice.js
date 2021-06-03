@@ -46,16 +46,15 @@ const productsSlice = createSlice({
     },
     setActiveInitForProduct: (state, action) => {
       //cap nhat cho tat ca ve lai true
-      const temp = state.products.map(el => ({...el, isActive: true}));
-      state.products = temp;
+      let products = state.products.map(el => ({...el, isActive: true}));
       const productsId = action.payload.products.map((el) => el._id);
       productsId.map((id) => {
         const index = state.products
           .map((el) => el._id)
           .indexOf(id);
-        state.products[index].isActive = !state.products[index]?.isActive;
-        return id;
+        return products[index].isActive = false;
       });
+      state.products = products;
     }
   },
   extraReducers: {

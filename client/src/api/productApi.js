@@ -3,8 +3,6 @@ import apiHandler from "./apiHandler";
 export const getAllProducts = async () => {
     const url = '/products';
     const res = await apiHandler.get(url);
-    console.log(res);
-    console.log('asjdhasjk');
     return res;
 }
 
@@ -25,4 +23,10 @@ export const updateProductById = async (product) => {
     const productResult = await apiHandler.put(url, product);
     return productResult;
 
+}
+
+export const deleteProductById = async (id) => {
+    const url = `/products/${id}`;
+    const productResult = await apiHandler.delete(url);
+    return productResult;
 }

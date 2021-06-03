@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
 import { login } from "../api/authApi";
 
 const Login = () => {
@@ -60,6 +61,7 @@ const Login = () => {
             </button>
           </div>
         </form>
+        <p>Bạn đã<Link to="/forget-password" className="font-medium text-indigo-700"> quên mật khẩu</Link></p>
       </div>
     </div>
   );

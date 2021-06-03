@@ -17,18 +17,24 @@ const categoriesSlice = createSlice({
     status: "idle",
   },
   reducers: {
+    setCategories: (state, action) => {
+      state.categories = action.payload;
+    },
     //cap nhat trang thai cho nhung category da ton tai trong sp roi
     setActiveInit: (state, action) => {
+      
       //action.payload.categories = [{_id, name}, ....];
+      let categories = state.categories.map(el => ({...el, isActive: true}));
+      //console.log(categories);
       const categoriesId = action.payload.categories.map((el) => el._id);
-      console.log(categoriesId);
       categoriesId.map((id) => {
-        const index = state.categories
+        const index = categories
           .map((el) => el._id)
           .indexOf(id);
-          console.log(index);
-        return state.categories[index].isActive = !state.categories[index].isActive;
+        return categories[index].isActive = false;
       });
+
+      state.categories = categories;
     },
     setActive: (state, action) => {
       const index = state.categories
@@ -41,10 +47,11 @@ const categoriesSlice = createSlice({
 
   extraReducers: {
     [fetchAllCategories.pending]: (state, action) => {
+      const categories = state.categories.map(el => ({...el, isActive: true}));
+      state.categories = categories;
       state.status = "loading";
     },
     [fetchAllCategories.fulfilled]: (state, action) => {
-      console.log(action.payload);
       state.categories = action.payload;
       state.status = "success";
     },
@@ -55,6 +62,6 @@ const categoriesSlice = createSlice({
   },
 });
 
-export const { setActive, setActiveInit } = categoriesSlice.actions;
+export const { setActive, setActiveInit, setCategories } = categoriesSlice.actions;
 
 export default categoriesSlice.reducer;

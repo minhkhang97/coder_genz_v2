@@ -49,6 +49,7 @@ const orderDetailSlice = createSlice({
       //neu chua thi them moi
       //neu co roi thi bo cai cu di
     },
+    
     //can: propertyId, optionId
     plusAmountValueOfProperty: (state, action) => {
       const { propertyId, optionId } = action.payload;
@@ -66,9 +67,12 @@ const orderDetailSlice = createSlice({
       if (
         totalQuantity <
         state.orderDetail.properties.filter((el) => el.id === propertyId)[0]
-          .quantityMax
+          .quantityMin
       )
         state.orderDetail.properties[index].options[index2].amount += 1;
+
+
+      //so luong san pham khong duoc vuot qua quantityMin
     },
     //can: propertyId, optionId
     minusAmountValueOfProperty: (state, action) => {
@@ -82,7 +86,17 @@ const orderDetailSlice = createSlice({
       if (state.orderDetail.properties[index].options[index2].amount > 1)
         state.orderDetail.properties[index].options[index2].amount -= 1;
     },
+    plusAmountForOrderDetail: (state, action) => {
+      state.orderDetail.amount += 1;
+      //console.log(state.orderDetail.amount);
+    },
+    minusAmountForOrderDetail: (state, action) => {
+      if(state.orderDetail.amount > 1)
+        state.orderDetail.amount -= 1;
+    }
   },
+
+  
 });
 
 export const {
@@ -90,6 +104,8 @@ export const {
   setValueOfProperty,
   plusAmountValueOfProperty,
   minusAmountValueOfProperty,
+  plusAmountForOrderDetail,
+  minusAmountForOrderDetail
 } = orderDetailSlice.actions;
 
 export default orderDetailSlice.reducer;

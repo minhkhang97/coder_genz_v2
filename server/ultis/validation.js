@@ -21,4 +21,9 @@ const loginValid = [
     check('password').isLength({min: 8, max: 30}).withMessage('do dai mat khau khong dung'),
 ];
 
+const validProduct = [
+    check('name').exists().withMessage('vui long nhap ten san pham'),
+    check('price').isLength({min: 5}).withMessage('ten san pham qua ngan'),
+]
+
 module.exports = {registerValid, loginValid};

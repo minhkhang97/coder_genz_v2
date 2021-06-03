@@ -53,6 +53,7 @@ const productSlice = createSlice({
   initialState: {
     status: "idle",
     product: initProduct,
+    error: [],
   },
   reducers: {
     setInitialState: (state) => {

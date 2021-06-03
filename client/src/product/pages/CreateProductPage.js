@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import ProductDetail from "../components/ProductDetail";
 import { useEffect } from "react";
@@ -9,12 +9,16 @@ import {
   setActiveInit,
 } from "../../category/slice/categoriesSlice";
 import { setInitialState, postProduct } from "../slice/productSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const CreateProductPage = (props) => {
   const { product } = useSelector((state) => state.productReducer);
   const { status, categories } = useSelector(
     (state) => state.categoriesReducer
   );
+
+  //thong bao tao san pham thanh cong hoac that baij
+  const [noti, setNoti] = useState([]);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(setInitialState());
@@ -25,11 +29,22 @@ const CreateProductPage = (props) => {
     })();
   }, []);
 
+  setTimeout(() => {
+    setNoti([]);
+  }, 4000)
+
   if (status === "loading") return <div>loading</div>;
   if (status === "failed") return <div>failed</div>;
 
   return (
-    <div>
+    <div className="relative">
+      {noti.length > 0 && (
+        <div className="bg-white fixed inset-x-1/2 w-1/6 p-6 rounded-md shadow-md text-center">
+          {noti.map((el) => (
+            <p className="text-red-700 font-medium">{el}</p>
+          ))}
+        </div>
+      )}
       <div class="mb-1 mt-5">
         <h1 class="uppercase text-xl font-semibold text-gray-800 tracking-wide ">
           thêm mới sản phẩm
@@ -38,7 +53,13 @@ const CreateProductPage = (props) => {
       <button
         className="py-1 px-4 rounded-md bg-indigo-600 text-white font-medium"
         onClick={async () => {
-          await dispatch(postProduct(product));
+          const result = await dispatch(postProduct(product));
+          const resultUnwrap = unwrapResult(result);
+          if (result.error) {
+            setNoti(result.error);
+          } else {
+            setNoti(["thêm sản phẩm thành công"]);
+          }
         }}
       >
         lưu

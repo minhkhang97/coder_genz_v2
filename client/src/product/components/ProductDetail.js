@@ -26,11 +26,11 @@ import { setActive, setActiveInit } from "../../category/slice/categoriesSlice";
 const ProductDetail = ({ product, categories }) => {
   const dispatch = useDispatch();
 
+  const [search, setSearch] = useState("");
+
   // useEffect(() => {
   //   dispatch(setActiveInit({ categories: product.categories }));
-  // }, [dispatch, product]);
-
-  const [search, setSearch] = useState("");
+  // }, [product, dispatch]);
 
   const modules = {
     toolbar: [
@@ -64,7 +64,9 @@ const ProductDetail = ({ product, categories }) => {
     <div>
       <div className="flex justify-end">
         <button
-          className="mx-4 py-1 px-4 rounded-md bg-indigo-600 text-white font-medium"
+          className={`mx-4 py-1 px-4 rounded-md text-white font-medium ${
+            product.isPublic ? "bg-indigo-600" : "bg-gray-600"
+          }`}
           onClick={() => dispatch(setPublic())}
         >
           công khai
@@ -111,7 +113,7 @@ const ProductDetail = ({ product, categories }) => {
             <Upload
               value={product.photos}
               onChange={(value) => {
-                console.log(value);
+                //console.log(value);
                 dispatch(setPhotos({ photos: value }));
               }}
             />
@@ -176,52 +178,45 @@ const ProductDetail = ({ product, categories }) => {
             }
           />
 
-          <div className="flex flex-col">
-            <p>danh mục</p>
-            <input
-              placeholder="search..."
-              type="text"
-              onChange={(e) => setSearch(e.target.value)}
-              value={search}
-            />
-            <div>
-              <ul>
-                {categories
-                  .filter((el) => el.isActive === true)
-                  .map((el, index) => (
-                    <li key={index}>
-                      {el.name}
-                      <i
-                        className="fas fa-plus"
-                        onClick={() => {
-                          dispatch(
-                            addCategory({
-                              category: { _id: el._id, name: el.name },
-                            })
-                          );
-                          dispatch(setActive({ id: el._id }));
-                        }}
-                      ></i>
-                    </li>
-                  ))}
-              </ul>
-            </div>
-            <div>
-              <p>ddax chon</p>
-              <ul>
-                {product.categories.map((el, index) => (
-                  <li key={index}>
-                    {el.name}{" "}
-                    <i
-                      className="fas fa-minus"
-                      onClick={() => {
-                        dispatch(removeCategory({ id: el._id }));
-                        dispatch(setActive({ id: el._id }));
-                      }}
-                    ></i>{" "}
-                  </li>
+          <div className="bg-white rounded-md py-2 px-4 my-4">
+            <p className="uppercase font-medium">danh mục</p>
+            <div className="flex my-2">
+              {categories
+                .filter((el) => el.isActive === true)
+                .map((el, index) => (
+                  <p
+                    onClick={() => {
+                      dispatch(
+                        addCategory({
+                          category: { _id: el._id, name: el.name },
+                        })
+                      );
+                      dispatch(setActive({ id: el._id }));
+                    }}
+                    key={index}
+                    className="px-2 cursor-pointer uppercase text-sm font-medium rounded-md text-gray-900 bg-gray-300 mr-4 "
+                  >
+                    {el.name}
+                    <i className="fas fa-plus text-xs ml-1"></i>
+                  </p>
                 ))}
-              </ul>
+            </div>
+            <div className="">
+              <p className="uppercase font-medium">đã chọn</p>
+              <div className="flex my-2">
+                {product.categories.map((el, index) => (
+                  <p
+                    key={index}
+                    className="px-2 cursor-pointer uppercase text-sm font-medium rounded-md text-indigo-50 bg-indigo-400 mr-4 "
+                    onClick={() => {
+                      dispatch(removeCategory({ id: el._id }));
+                      dispatch(setActive({ id: el._id }));
+                    }}
+                  >
+                    {el.name} <i className="fas fa-minus text-xs"></i>{" "}
+                  </p>
+                ))}
+              </div>
             </div>
           </div>
         </div>

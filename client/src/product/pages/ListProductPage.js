@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { fetchProducts } from "../slice/productsSlice";
 import { Link } from "react-router-dom";
+import { fetchAllCategories } from "../../category/slice/categoriesSlice";
 
 const ListProductPage = (props) => {
   const productsReducer = useSelector((state) => state.productsReducer);
@@ -13,6 +14,7 @@ const ListProductPage = (props) => {
   useEffect(() => {
     (async () => {
       await dispatch(fetchProducts());
+      await dispatch(fetchAllCategories());
     })();
   }, [dispatch]);
 

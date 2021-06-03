@@ -36,7 +36,7 @@ const Property = ({ propertyId, isRequire, options, name, quantityMax, quantityM
           )
         }
       />
-      <div className="flex items-center">
+      {/* <div className="flex items-center">
         <label className="my-1 capitalize font-semibold text-sm">
           bắt buộc
         </label>
@@ -46,9 +46,9 @@ const Property = ({ propertyId, isRequire, options, name, quantityMax, quantityM
           className="mx-8 w-6 h-6"
           onChange={() => dispatch(setRequireForProperty({ propertyId }))}
         />
-      </div>
-      <div className="grid grid-cols-2 gap-5">
-        <Input
+      </div> */}
+      <div className="grid grid-cols-1 gap-5">
+        {/* <Input
           label="số lượng tối đa"
           type="number"
           value={quantityMax}
@@ -60,7 +60,7 @@ const Property = ({ propertyId, isRequire, options, name, quantityMax, quantityM
               })
             )
           }
-        />
+        /> */}
         <Input
           label="số lượng tối thiểu"
           type="number"

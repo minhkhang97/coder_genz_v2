@@ -44,7 +44,7 @@ const Cart = ({ cart }) => {
                     <p className="text-xs w-1/4 font-light text-gray-500">
                       {el.name}
                     </p>
-                    <div className="w-3/4">
+                    <div className="w-3/4 flex flex-col">
                       {el.options.map((el2, index3) => (
                         <span key={index3}>
                           {el2.value} x {el2.amount}

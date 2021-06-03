@@ -20,7 +20,11 @@ const ListCategoryPage = () => {
 
   return (
     <div>
-      <h1>danh sach danh muc</h1>
+      <div class="mb-1 mt-5">
+        <h1 class="uppercase text-xl font-semibold text-gray-800 tracking-wide ">
+          danh mục sản phẩm
+        </h1>
+      </div>
       <div className="text-right my-4">
         <p className="py-1 px-4 bg-indigo-500 text-white inline-block rounded-md capitalize text-sm font-medium">
           <Link to="/admin/categories/create">create category</Link>

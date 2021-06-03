@@ -17,7 +17,7 @@ const CategoryDetail = ({ category, products }) => {
     <div>
       <Input
         type="text"
-        lable="ten danh muc"
+        label="ten danh muc"
         value={category.name}
         onChange={(value) => dispatch(setNameCatgory({ name: value }))}
       />
