@@ -7,7 +7,7 @@ const getRandomInt = (min = 100000, max = 900000) => {
   return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
 };
 
-const sendMail = (data, email) => {
+const sendMail = (title, data, email) => {
   const transporter = nodemailer.createTransport({
     // config mail server
     host: "smtp.gmail.com",
@@ -21,7 +21,7 @@ const sendMail = (data, email) => {
   let mailOptions = {
     from: "CODER GENZ",
     to: email,
-    subject: "xac thuc email",
+    subject: title,
     text: data,
   };
 

@@ -26,4 +26,7 @@ const validProduct = [
     check('price').isLength({min: 5}).withMessage('ten san pham qua ngan'),
 ]
 
-module.exports = {registerValid, loginValid};
+const emailValid = [check('email').exists().withMessage('vui long nhap email'),
+check('email').isEmail().withMessage('email khong hop le')];
+
+module.exports = {registerValid, loginValid, emailValid};

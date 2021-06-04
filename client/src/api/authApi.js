@@ -18,3 +18,10 @@ export const getUser = async () => {
   const res = await apiHandler.get(url);
   return res;
 };
+
+export const forgetPassword = async (email) => {
+  const url = '/auth/admin/forget-password';
+  const res = await apiHandler.post(url, {email});
+  console.log(res);
+  return res;
+}

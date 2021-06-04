@@ -13,6 +13,7 @@ import DashBoard from './guards/DashBoard';
 import Login from './common/Login';
 import DatMonPage from "./product/pages/DatMonPage";
 import ThanhToanPage from "./product/pages/ThanhToanPage";
+import ForgetPassword from "./common/ForgetPassword";
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
         <PrivateRouter path="/admin" component={DashBoard} />
         <Route path="/dat-mon" component={DatMonPage} />
         <Route path="/thanh-toan" component={ThanhToanPage} />
+        <Route path="/forget-password" component={ForgetPassword} />
       </Switch>
     </Router>
   );

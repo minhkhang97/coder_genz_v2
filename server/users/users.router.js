@@ -1,7 +1,11 @@
 const express = require("express");
-require('dotenv').config();
+require("dotenv").config();
 const passport = require("passport");
-const { loginValid, registerValid } = require("../ultis/validation");
+const {
+  loginValid,
+  registerValid,
+  emailValid,
+} = require("../ultis/validation");
 const nodemailer = require("nodemailer");
 const {
   getRandomInt,
@@ -12,7 +16,7 @@ const {
 const router = express.Router();
 const User = require("./users.model");
 const bcrypt = require("bcryptjs");
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 
 //tu accessToken tra ve thong tin user
@@ -25,7 +29,7 @@ router.get(
 );
 
 const myValidationResult = validationResult.withDefaults({
-  formatter: error => {
+  formatter: (error) => {
     return {
       mess: error.msg,
     };
@@ -39,7 +43,7 @@ router.post("/login", loginValid, async (req, res) => {
   if (!errors.isEmpty()) {
     const t = errors.array();
     console.log(t);
-    return res.status(200).json({error: errors.array().map(el => el.mess)});
+    return res.status(200).json({ error: errors.array().map((el) => el.mess) });
   }
   //kiem tra xem email da ton tai chua
   const { email, password } = req.body;
@@ -99,7 +103,7 @@ router.post("/register", registerValid, async (req, res) => {
     await User.findOneAndUpdate({ email }, { code });
 
     //gui mail
-    sendMail(`ma kich hoat ${code}`, email);
+    sendMail("kich hoat email", `ma kich hoat ${code}`, email);
 
     return res.status(400).json({
       error: "tai khoan chua duoc kich hoat",
@@ -122,7 +126,7 @@ router.post("/register", registerValid, async (req, res) => {
   const linkActive = createLinkActive(email);
 
   //gui email
-  sendMail(`ma kich hoat ${code}`, email);
+  sendMail("kich hoat email", `ma kich hoat ${code}`, email);
 
   return res.status(200).json({
     email: result.email,
@@ -178,8 +182,41 @@ router.post("/send-email", async (req, res) => {
   //email da dang ky nhung chua kich hoat
   const code = getRandomInt();
   await User.findOneAndUpdate({ email }, { code });
-  sendMail(`ma kich hoat la ${code}`, email);
+  sendMail("kich hoat email", `ma kich hoat la ${code}`, email);
   return res.status(200).json({ mess: "gui email thanh cong" });
+});
+
+router.post("/forget-password", emailValid, async (req, res) => {
+  const errors = myValidationResult(req);
+
+  if (!errors.isEmpty()) {
+    const t = errors.array();
+    console.log(t);
+    return res.status(200).json({ error: errors.array().map((el) => el.mess) });
+  }
+
+  const { email } = req.body;
+  console.log(email);
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.status(200).json({ error: ["tài khoản không đúng"] });
+  }
+  try {
+    const code = getRandomInt();
+    console.log(code);
+    const hash = await hashCode(String(code));
+    console.log(hash);
+    const userAfter = await User.findOneAndUpdate(
+      { email },
+      { password: hash },
+      { new: true }
+    );
+    console.log(userAfter);
+    sendMail("lấy lại mật khẩu", `email ${email} có mật khẩu mới là ${code}`, email);
+    return res.status(200).json({ success: true });
+  } catch (e) {
+    return res.status(200).json({ error: ["Lỗi vui lòng thử lại"] });
+  }
 });
 
 module.exports = router;
