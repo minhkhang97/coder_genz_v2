@@ -15,6 +15,7 @@ import DatMonPage from "./product/pages/DatMonPage";
 import ThanhToanPage from "./product/pages/ThanhToanPage";
 import ForgetPassword from "./common/ForgetPassword";
 import MenuPage from "./product/pages/MenuPage";
+import ProductPage from "./product/pages/ProductPage";
 
 const App = () => {
   return (
@@ -25,7 +26,8 @@ const App = () => {
         <Route path="/dat-mon" component={DatMonPage} />
         <Route path="/thanh-toan" component={ThanhToanPage} />
         <Route path="/forget-password" component={ForgetPassword} />
-        <Route path="/menu" component={MenuPage} />
+        <Route path="/menu" exact component={MenuPage} />
+        <Route path="/menu/:id" exact component={ProductPage} />
       </Switch>
     </Router>
   );
