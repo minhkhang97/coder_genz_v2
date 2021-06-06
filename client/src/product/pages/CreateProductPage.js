@@ -29,9 +29,9 @@ const CreateProductPage = (props) => {
     })();
   }, []);
 
-  setTimeout(() => {
-    setNoti([]);
-  }, 4000)
+  // setTimeout(() => {
+  //   setNoti([]);
+  // }, 4000)
 
   if (status === "loading") return <div>loading</div>;
   if (status === "failed") return <div>failed</div>;
@@ -39,10 +39,11 @@ const CreateProductPage = (props) => {
   return (
     <div className="relative">
       {noti.length > 0 && (
-        <div className="bg-white fixed inset-x-1/2 w-1/6 p-6 rounded-md shadow-md text-center">
+        <div className="bg-white fixed inset-x-1/2 w-1/4 p-6 rounded-md shadow-md text-center">
           {noti.map((el) => (
             <p className="text-red-700 font-medium">{el}</p>
           ))}
+          <button onClick={() => setNoti([])} className="rounded-md my-2 px-4 py-1 uppercase font-medium text-sm bg-red-700 text-white">Đồng ý</button>
         </div>
       )}
       <div class="mb-1 mt-5">
@@ -55,8 +56,9 @@ const CreateProductPage = (props) => {
         onClick={async () => {
           const result = await dispatch(postProduct(product));
           const resultUnwrap = unwrapResult(result);
-          if (result.error) {
-            setNoti(result.error);
+          console.log(resultUnwrap);
+          if (resultUnwrap.error) {
+            setNoti(resultUnwrap.error);
           } else {
             setNoti(["thêm sản phẩm thành công"]);
           }

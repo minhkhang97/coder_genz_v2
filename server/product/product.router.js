@@ -13,6 +13,15 @@ const {
   findOneProduct,
 } = require("./product.controller");
 const Category = require("../category/category.model");
+const { validProduct } = require("../ultis/validation");
+
+const myValidationResult = validationResult.withDefaults({
+  formatter: (error) => {
+    return {
+      mess: error.msg,
+    };
+  },
+});
 
 //cho customer
 
@@ -34,22 +43,33 @@ router.get("/:id", async (req, res) => {
   return res.status(200).json(product);
 });
 
+router.get("/group", (req, res) => {
+  res.send("sadgashj");
+});
+
 //check gia tri truyen len trc
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
+  validProduct,
   async (req, res) => {
+    const errors = myValidationResult(req);
+    if (!errors.isEmpty()) {
+      const t = errors.array();
+      console.log(t);
+      return res
+        .status(200)
+        .json({ error: errors.array().map((el) => el.mess) });
+    }
     //kiem tra dau vao, xem cac gia tri co ton tai khong
     console.log(req.user);
     try {
       const product = await createProduct(req.body, String(req.user._id));
       return res.status(200).json(product);
     } catch (err) {
-      return res
-        .status(200)
-        .json({
-          error: ["thêm mới sản phẩm không thành công, vui lòng thử lại"],
-        });
+      return res.status(200).json({
+        error: ["thêm mới sản phẩm không thành công, vui lòng thử lại"],
+      });
     }
   }
 );
@@ -58,8 +78,17 @@ router.post(
 router.put(
   "/:id",
   passport.authenticate("jwt", { session: false }),
+  validProduct,
   async (req, res) => {
     //kiem tra xem id co dung khong
+    const errors = myValidationResult(req);
+    if (!errors.isEmpty()) {
+      const t = errors.array();
+      console.log(t);
+      return res
+        .status(200)
+        .json({ error: errors.array().map((el) => el.mess) });
+    }
     const { id } = req.params;
     try {
       const productNeedUpdate = await Product.findOne({ _id: id });
@@ -91,9 +120,7 @@ router.delete(
       const categoriesId = productNeedDelete.categories;
       console.log(categoriesId, productNeedDelete);
       if (!productNeedDelete) {
-        return res
-          .status(200)
-          .json({ error: ["sản phẩm không tồn tại"] });
+        return res.status(200).json({ error: ["sản phẩm không tồn tại"] });
       }
       await Product.findByIdAndDelete(id);
       //xoa cac category chua san pham nay
@@ -101,9 +128,9 @@ router.delete(
         { _id: { $in: categoriesId } },
         { $pull: { products: id } }
       );
-      return res.status(200).json({success: true});
+      return res.status(200).json({ success: true });
     } catch (error) {
-        console.log(error);
+      console.log(error);
       return res.status(200).json({ error: ["xoá sản phẩm không thành công"] });
     }
   }

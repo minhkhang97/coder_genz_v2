@@ -245,7 +245,7 @@ const DatMonPage = () => {
               </div>
             </div>
 
-            <button onClick={() => setShowProduct(false)}>tat</button>
+            <button className="text-red-700" onClick={() => setShowProduct(false)}>tắt</button>
           </div>
         </div>
       )}
@@ -280,6 +280,7 @@ const DatMonPage = () => {
                         setShowProduct(true);
                         dispatch(
                           setInitOrderDetail({
+                            productId: el._id,
                             _id: el._id,
                             name: el.name,
                             price: el.price,
@@ -305,7 +306,7 @@ const DatMonPage = () => {
                               {el.name}
                             </h5>
                             <p className="text-red-700 font-semibold uppercase">
-                              {el.price} VND
+                              {el.discount > 0 ? el.discount : el.price} VND
                             </p>
                           </div>
                           <div>

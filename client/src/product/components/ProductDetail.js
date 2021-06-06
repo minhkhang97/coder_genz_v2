@@ -92,7 +92,7 @@ const ProductDetail = ({ product, categories }) => {
             />
           </div>
 
-          <div>
+          {/* <div>
             <p className="font-semibold text-sm text-gray-900 py-1 capitalize">
               mô tả chi tiết
             </p>
@@ -105,7 +105,7 @@ const ProductDetail = ({ product, categories }) => {
                 dispatch(setDescription({ description: value }))
               }
             />
-          </div>
+          </div> */}
           <div>
             <p className="font-semibold text-sm text-gray-900 py-1 capitalize">
               hình ảnh
@@ -158,7 +158,7 @@ const ProductDetail = ({ product, categories }) => {
             value={product.discount}
             onChange={(value) => dispatch(setDiscount({ discount: value }))}
           />
-          <Input
+          {/* <Input
             label="số lượng tồn kho"
             type="number"
             value={product.quantity}
@@ -176,7 +176,7 @@ const ProductDetail = ({ product, categories }) => {
             onChange={(value) =>
               dispatch(setStatus({ status: { code: value, mess: "" } }))
             }
-          />
+          /> */}
 
           <div className="bg-white rounded-md py-2 px-4 my-4">
             <p className="uppercase font-medium">danh mục</p>

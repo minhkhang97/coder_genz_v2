@@ -1,7 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import shortid from "shortid";
-import { createProduct, updateProductById } from "../../api/productApi";
+import { createProduct, deleteProductById, updateProductById } from "../../api/productApi";
+
+export const deleteProduct = createAsyncThunk('/products/delete', async (id) => {
+  const result = await deleteProductById(id);
+  console.log(result);
+})
 
 export const postProduct = createAsyncThunk(
   "/products/post",

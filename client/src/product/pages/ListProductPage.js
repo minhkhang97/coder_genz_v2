@@ -49,9 +49,6 @@ const ListProductPage = (props) => {
         <span>
           <p>ngày tạo</p>
         </span>
-        <span>
-          <p>trạng thái</p>
-        </span>
       </div>
       <div className="bg-white my-4 rounded-md uppercase font-semibold text-sm text-gray-900">
         {productsReducer.products.map((el, index) => (
@@ -71,11 +68,6 @@ const ListProductPage = (props) => {
               </span>
               <span>
                 <p class="text-gray-500">{el.create_at}</p>
-              </span>
-              <span>
-                <p class="inline bg-indigo-700 text-white text-xs font-semibold px-2 py-1 rounded-lg">
-                  {el.status.mess}
-                </p>
               </span>
             </div>
           </Link>

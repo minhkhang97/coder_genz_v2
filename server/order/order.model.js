@@ -13,7 +13,7 @@ const orderSchema = new mongoose.Schema({
       specific_address: String,
     },
   },
-  cart: [],
+  order_details: [],
   status: [
     {
       code: {
