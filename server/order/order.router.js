@@ -1,11 +1,14 @@
 const express = require("express");
 const OrderDetail = require("../order detail/orderdetail.model");
 const Order = require("./order.model");
-const {validationResult } = require("express-validator");
+const { validationResult } = require("express-validator");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const router = express.Router();
 
-const {validOrder} = require('../ultis/validation');
+const { validOrder } = require("../ultis/validation");
+const Customer = require("../customer/customer.model");
 
 router.post("/", async (req, res) => {
   let order = req.body;
@@ -77,16 +80,79 @@ const myValidationResult = validationResult.withDefaults({
   },
 });
 
-router.post('/v2', validOrder, async (req, res) => {
+router.post("/v2", validOrder, async (req, res) => {
   const errors = myValidationResult(req);
   if (!errors.isEmpty()) {
     const t = errors.array();
     console.log(t);
-    return res
-      .status(200)
-      .json({ error: errors.array().map((el) => el.mess) });
+    return res.status(200).json({ error: errors.array().map((el) => el.mess) });
   }
-  res.send('linh tinh');
+  const order = req.body;
+
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  console.log(token);
+  res.send("linh tinh");
+});
+
+router.post("/test", validOrder, async (req, res) => {
+
+  const errors = myValidationResult(req);
+  if (!errors.isEmpty()) {
+    const t = errors.array();
+    return res.status(200).json({ error: errors.array().map((el) => el.mess) });
+  }
+
+  const order = req.body;
+  let orderDetails = order.cart;
+  orderDetails = orderDetails.map(el => ({
+    id: el.id,
+    productId: el.productId,
+    name: el.name,
+    price: el.price,
+    quantity: el.amount,
+    totalPrice: el.price * el.amount,
+    properties: el.properties.map(property => ({
+      name: property.name,
+      options: property.options,
+    })),
+  }))
+
+  const totalQuantity = orderDetails.map(el => el.quantity).reduce(((acc, curr) => acc + curr), 0);
+  const totalPrice = orderDetails.map(el => el.totalPrice).reduce(((acc, curr) => acc + curr), 0);
+
+
+  //them order trc
+
+  const orderNew = new Order({
+    contact: order.contact,
+    order_details: orderDetails,
+    totalPrice,
+    totalQuantity,
+    status: [{code: '001', mess: 'chờ xác nhận'}]
+  })
+
+  console.log(orderNew);
+
+  //sau day thi them vao customer
+
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  if (token) {
+    try {
+      const decode = jwt.verify(token, process.env.SECRET_1);
+      const isCustomer = await Customer.findOne({_id: decode.sub});
+      //console.log(isCustomer);
+      if(isCustomer){
+        //them order o day
+      }
+    } catch {
+      console.log("loi");
+    }
+  }
+
+  //them san pham o day
+  res.send("linh tinh");
 });
 
 module.exports = router;

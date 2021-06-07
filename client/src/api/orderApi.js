@@ -1,7 +1,7 @@
 import apiHandler from "./apiHandler";
 
 export const createOrder = async (order) => {
-    const url = '/order/v2';
+    const url = '/order/test';
     const data = await apiHandler.post(url, order);
     return data;
 }

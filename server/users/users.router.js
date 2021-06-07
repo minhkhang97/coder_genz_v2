@@ -47,31 +47,35 @@ router.post("/login", loginValid, async (req, res) => {
   }
   //kiem tra xem email da ton tai chua
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
+  try {
+    const user = await User.findOne({ email });
 
-  //email chua tao tai khaon
-  if (!user) {
-    return res.status(200).json({ error: ["tai khoan email khong dung"] });
+    //email chua tao tai khaon
+    if (!user) {
+      return res.status(200).json({ error: ["tai khoan email khong dung"] });
+    }
+
+    //email chua kich hoat tai khaon
+    if (user && user.isActive === false)
+      return res.status(200).json({
+        error: ["tai khoan chua duoc kich hoat"],
+        linkActive: createLinkActive(email),
+      });
+
+    const temp = await bcrypt.compare(password, user.password);
+    //da kich hoat tai khoan nhung sai mat khau
+    if (!temp)
+      return res.status(200).json({ error: ["mat khau khong chinh xac"] });
+
+    //dang nhap thanh cong
+    //tao token
+    const accessToken = jwt.sign({ sub: user._id }, process.env.SECRET_1);
+    const refreshToken = jwt.sign({ sub: user._id }, process.env.SECRET_2);
+
+    return res.status(200).json({ token: { accessToken, refreshToken } });
+  } catch {
+    return res.status(200).json({ error: ["đăng nhập không thành công"] });
   }
-
-  //email chua kich hoat tai khaon
-  if (user && user.isActive === false)
-    return res.status(200).json({
-      error: ["tai khoan chua duoc kich hoat"],
-      linkActive: createLinkActive(email),
-    });
-
-  const temp = await bcrypt.compare(password, user.password);
-  //da kich hoat tai khoan nhung sai mat khau
-  if (!temp)
-    return res.status(200).json({ error: ["mat khau khong chinh xac"] });
-
-  //dang nhap thanh cong
-  //tao token
-  const accessToken = jwt.sign({ sub: user._id }, process.env.SECRET_1);
-  const refreshToken = jwt.sign({ sub: user._id }, process.env.SECRET_2);
-
-  return res.status(200).json({ token: { accessToken, refreshToken } });
 });
 
 router.post("/register", registerValid, async (req, res) => {
@@ -212,7 +216,11 @@ router.post("/forget-password", emailValid, async (req, res) => {
       { new: true }
     );
     console.log(userAfter);
-    sendMail("lấy lại mật khẩu", `email ${email} có mật khẩu mới là ${code}`, email);
+    sendMail(
+      "lấy lại mật khẩu",
+      `email ${email} có mật khẩu mới là ${code}`,
+      email
+    );
     return res.status(200).json({ success: true });
   } catch (e) {
     return res.status(200).json({ error: ["Lỗi vui lòng thử lại"] });

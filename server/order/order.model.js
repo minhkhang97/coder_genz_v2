@@ -6,6 +6,7 @@ const orderSchema = new mongoose.Schema({
       type: String,
     },
     phone: String,
+    specific_address: String,
     address: {
       city: String,
       district: String,
@@ -24,7 +25,7 @@ const orderSchema = new mongoose.Schema({
     },
   ],
   totalPrice: Number,
-  totalAmount: Number,
+  totalQuantity: Number,
   create_at: {
     type: Date,
     default: Date.now,
