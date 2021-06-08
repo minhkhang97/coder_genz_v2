@@ -14,7 +14,23 @@ const orderSchema = new mongoose.Schema({
       specific_address: String,
     },
   },
-  order_details: [],
+  // order_details: [{
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: 'order_detail'
+  // }],
+  order_details: [{
+    id: String,
+    productId: String,
+    name: String,
+    price: Number,
+    quantity: Number, 
+    totalPrice: Number,
+    properties: Array,
+    product: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'product'
+    }
+  }],
   status: [
     {
       code: {

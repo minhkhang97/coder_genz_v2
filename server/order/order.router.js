@@ -10,67 +10,11 @@ const router = express.Router();
 
 const { validOrder } = require("../ultis/validation");
 const Customer = require("../customer/customer.model");
-
-router.post("/", async (req, res) => {
-  let order = req.body;
-  //console.log(order);
-  const orderDetails = order.cart;
-  const orderDetailsId = await Promise.all(
-    orderDetails.map(async (orderDetail) => {
-      //console.log(orderDetail.properties);
-      const orderDetailNew = new OrderDetail({
-        product: orderDetail.productId,
-        productId: orderDetail.productId,
-        price: orderDetail.price,
-        quantity: orderDetail.amount,
-        totalPrice: orderDetail.price + orderDetail.amount,
-        properties: orderDetail.properties.map((el) => ({
-          id: el.id,
-          name: el.name,
-          options: el.options,
-        })),
-      });
-      const orderDetailResult = await orderDetailNew.save();
-      return orderDetailResult._id;
-    })
-  ).catch((error) => console.log(error));
-
-  console.log(orderDetailsId);
-  order.totalPrice = order.cart.reduce(
-    (acc, curr) => acc + curr.price * curr.amount,
-    0
-  );
-  order.totalAmount = order.cart.reduce((acc, curr) => acc + curr.amount, 0);
-  order.status = [{ code: "001", mess: "cho xac nhan" }];
-  const orderNew = new Order(order);
-  //await orderNew.save();
-  res.json({ order: req.body });
-});
+const Product = require("../product/product.model");
 
 router.get("/", async (req, res) => {
   const orders = await Order.find();
   res.json(orders);
-});
-
-router.get("/groupByDay", async (req, res) => {
-  const temp = await OrderDetail.aggregate([
-    {
-      $project: {
-        year: { $year: "$create_at" },
-        month: { $month: "$create_at" },
-        day: { $dayOfMonth: "$create_at" },
-        totalPrice: 1,
-      },
-    },
-    {
-      $group: {
-        _id: { year: "$year", month: "$month", day: "$day" },
-        total: { $sum: "$totalPrice" },
-      },
-    },
-  ]);
-  console.log(temp);
-  return res.send("asdhjasg");
 });
 
 const myValidationResult = validationResult.withDefaults({
@@ -117,6 +61,7 @@ router.post("/test", validOrder, async (req, res) => {
       name: property.name,
       options: property.options,
     })),
+    product: el.productId,
   }));
 
   const totalQuantity = orderDetails
@@ -233,6 +178,8 @@ router.get("/thongkedoanhso", async (req, res) => {
 
 //thong ke theo so luong san pham
 //phan nay co ve kho ne
+
+//dung roi ne, perfe
 router.get("/thongkesanpham", async (req, res) => {
   const temp = await Order.aggregate([
     {
@@ -256,25 +203,67 @@ router.get("/thongkesanpham", async (req, res) => {
         newRoot: "$order_details",
       },
     },
-    // {
-    //   $group: {
-    //     _id: { $dateToString: { format: "%Y-%m", date: "$create_at" } },
-    //   },
-    // },
     {
       $group: {
         _id: {
-          date: { $dateToString: { format: "%Y-%m", date: "$create_at" } },
-          productId: "$productId",
-          name: '$name'
+          date: { $dateToString: { format: "%Y-%m-%d", date: "$create_at" } },
+          product: "$product",
         },
         totalQuantity: { $sum: "$quantity" },
       },
     },
+    {
+      $lookup: {
+        from: "products",
+        localField: "_id.product",
+        foreignField: "_id",
+        as: "product_docs",
+      },
+    },
   ]);
+
+  const temp2 = await Order.aggregate([
+    {
+      $unwind: "$order_details",
+    },
+    {
+      $addFields: {
+        "order_details.create_at": "$create_at",
+      },
+    },
+
+    {
+      $replaceRoot: {
+        newRoot: "$order_details",
+      },
+    },
+    {
+      $lookup: {
+        from: "product",
+        localField: "product",
+        foreignField: "_id",
+        as: "product_doc",
+      },
+    },
+  ]);
+
   // const t2 = temp.map(el => el.order_details).flat();
   // console.log(t2);
   res.json(temp);
+});
+
+//su dung voi cai order detail
+router.get("/thongke2", async (req, res) => {
+  const temp = await OrderDetail.aggregate([{
+    $lookup: {
+      from: 'products',
+      localField: 'product',
+      foreignField: '_id',
+      as: 'product_doc'
+    }
+  }])
+
+  return res.json(temp);
 });
 
 module.exports = router;
