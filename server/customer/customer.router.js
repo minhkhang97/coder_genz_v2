@@ -5,6 +5,7 @@ const Customer = require("./customer.model");
 const { hashCode } = require("../ultis/helpers");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const passport = require("passport");
 
 const router = express.Router();
 
@@ -78,6 +79,29 @@ router.post("/login", loginValid, async (req, res) => {
       .status(200)
       .json({ error: ["đăng ký thông thành công, vui lòng thử lại"] });
   }
+});
+
+router.post("/read", async (req, res) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  if (token) {
+    try {
+      const decode = jwt.verify(token, process.env.SECRET_1);
+      const isCustomer = await Customer.findOne({ _id: decode.sub }).populate({
+        path: "orders",
+      });
+      //console.log(isCustomer);
+      if (isCustomer) {
+        return res.status(200).json({ success: true, data: isCustomer });
+      }
+    } catch {
+      return res.status(403).json({ error: ["đăng nhập không thành công"] });
+    }
+  }
+});
+
+router.put('/:id', passport.authenticate('jwt', {session: false}), async (req, res) => {
+
 });
 
 module.exports = router;

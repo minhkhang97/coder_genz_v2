@@ -30,7 +30,7 @@ const ProductPage = () => {
                 </div>
                 <div className="flex">
                     <div className="w-1/2 mr-6">
-                        <img className="h-4/5" src={product?.photos[0]?.url} alt={product.name} />
+                        <img className="" src={product?.photos[0]?.url} alt={product.name} />
                     </div>
 
                     <div className="w-1/2 ml-6">
