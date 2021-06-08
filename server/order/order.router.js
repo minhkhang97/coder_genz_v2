@@ -173,7 +173,7 @@ router.get("/thongkedoanhso", async (req, res) => {
     },
   ]);
   console.log(day, month, year);
-  res.send("linh tinh");
+  return res.status(200).json({success: true, data: day});
 });
 
 //thong ke theo so luong san pham

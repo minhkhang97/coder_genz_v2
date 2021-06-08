@@ -13,7 +13,7 @@ const Home = (props) => {
       <div className="capitalize tracking-wide font-semibold text-gray-500 text-sm">
         <div className="my-2">
           <p className="py-2 px-2 rounded-md hover:bg-green-100 hover:text-gray-900">
-            <i class="fas fa-pager pr-2"></i>dashboard
+            <Link to="/admin/chart"><i class="fas fa-pager pr-2"></i>dashboard</Link>
           </p>
         </div>
         <div className="">
