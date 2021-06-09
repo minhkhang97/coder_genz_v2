@@ -32,4 +32,4 @@ const customerSlice = createSlice({
 });
 
 
-export default customerSlice.reducers;
+export default customerSlice.reducer;
