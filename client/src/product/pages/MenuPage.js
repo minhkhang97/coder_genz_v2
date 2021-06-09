@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAllCategories } from "../../category/slice/categoriesSlice";
 import {Link} from 'react-router-dom'
+import Header from "../../common/Header";
 
 const MenuPage = () => {
   const { categories, status } = useSelector(
@@ -19,6 +20,7 @@ const MenuPage = () => {
   if (status === "failed") return <h1>failed</h1>;
   return (
     <div className="bg-red-50">
+      <Header/>
       <div className="py-6">
         <h1 className="text-4xl uppercase font-semibold text-gray-900 text-center">Thực đơn sườn nướng</h1>
       </div>

@@ -49,8 +49,8 @@ const ChartPage = () => {
 
   useEffect(() => {
     (async () => {
-        let d = Date;
-        d = d.toString();
+        let d = Date(Date.now());
+        d = d.toIOString();
         console.log(d);
       const res = await apiHandler.get("/order/thongkedoanhso");
       const data = res.data;
