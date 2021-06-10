@@ -43,7 +43,7 @@ const ListOrderPage = () => {
       </div>
       <div className="bg-white my-4 rounded-md uppercase font-semibold text-sm text-gray-900">
         {orders.map((el, index) => (
-          <Link to="" key={index}>
+          <Link to={"/admin/orders/" + el._id} key={index}>
             <div class="px-4 grid grid-cols-6 border-b border-solid border-gray-200 py-3 hover:shadow-md hover:rounded-md capitalize">
               <span>
                 <p class="font-semibold text-gray-700">{index}</p>
@@ -55,13 +55,13 @@ const ListOrderPage = () => {
                 <p class="text-red-700">{el.contact.phone}</p>
               </span>
               <span>
-                <p class="text-red-700">{el.specific_address}</p>
+                <p class="text-red-700">{el.contact.specific_address}</p>
               </span>
               <span>
                 <p>{el.totalPrice}</p>
               </span>
               <span>
-                <p>{el.status.mess}</p>
+                <p className="px-1 bg-indigo-700 rounded-md text-center text-white">{el.status[el.status.length - 1].mess}</p>
               </span>
             </div>
           </Link>

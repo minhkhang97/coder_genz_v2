@@ -7,6 +7,7 @@ import UpdateCategoryPage from "../category/pages/UpdateCategoryPage";
 import ChartPage from "../chart/page/ChartPage";
 import Home from "../common/Home";
 import ListOrderPage from "../order/pages/ListOrderPage";
+import OrderDetailPage from "../order/pages/OrderDetailPage";
 // import ProductsPage from '../product/pages/ProductsPage'
 // import CategoryPage from '../category/CategoryPage'
 // import CreateProductPage from '../product/pages/CreateProductPage'
@@ -24,7 +25,8 @@ const DashBoard = () => {
           <Route path="/admin/categories/:id" exact component={UpdateCategoryPage} />
           
           <Route path="/admin/products" component={ProductRouter} />
-          <Route path="/admin/orders/" component={ListOrderPage} />
+          <Route path="/admin/orders/" exact component={ListOrderPage} />
+          <Route path="/admin/orders/:id" exact component={OrderDetailPage} />
           <Route path="/admin/chart" component={ChartPage} />
 
           {/* <Route path="/admin/category" exact component={CategoryPage} />
