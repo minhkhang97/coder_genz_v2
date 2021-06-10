@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import shortid from "shortid";
 import { Link } from "react-router-dom";
-import { fetchAllCategories } from "../../category/slice/categoriesSlice";
+import {
+  fetchAllCategories,
+  searchByName,
+} from "../../category/slice/categoriesSlice";
 import Cart from "../components/Cart";
 import { addCart } from "../slice/cartSlice";
 import {
@@ -23,6 +26,7 @@ const DatMonPage = () => {
 
   const [productCurrent, setProductCurrent] = useState();
   const [showProduct, setShowProduct] = useState(false);
+  const [search, setSearch] = useState("");
   const dispatch = useDispatch();
 
   const [error, setError] = useState([]);
@@ -76,6 +80,7 @@ const DatMonPage = () => {
       await dispatch(fetchAllCategories());
     })();
   }, [dispatch]);
+
   if (status === "loading") return <div>loading</div>;
   if (status === "failed") return <div>failed</div>;
   return (
@@ -267,6 +272,17 @@ const DatMonPage = () => {
           </ul>
         </div>
         <div className="w-7/12 mx-4">
+          <div>
+            <input
+            className="px-4 py-2 rounded-xl outline-none w-full border border-solid border-red-100"
+              text="text"
+              placeholder="Tim kiem"
+              onChange={(e) => {
+                setSearch(e.target.value);
+                dispatch(searchByName({ name: e.target.value }));
+              }}
+            />
+          </div>
           {categories.map((category, index) => (
             <div key={index}>
               <h4 className="uppercase font-semibold text-2xl text-gray-800">
@@ -275,6 +291,7 @@ const DatMonPage = () => {
               <div>
                 {category.products
                   .filter((el) => el.isPublic === true)
+                  .filter(el => el.isShow === true)
                   .map((el, index) => (
                     <div
                       className="bg-white border border-solid border-gray-50 shadow-md my-2"

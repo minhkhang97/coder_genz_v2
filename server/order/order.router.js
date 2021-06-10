@@ -40,6 +40,18 @@ router.post("/v2", validOrder, async (req, res) => {
   res.send("linh tinh");
 });
 
+//lay thong tin chi tiet don hang
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  const isOrder = await Order.findOne({ _id: id });
+  if (!isOrder)
+    return res
+      .status(200)
+      .json({ success: false, error: ["đơn hàng không tồn tại"] });
+
+  return res.status(200).json({ success: true, data: isOrder });
+});
+
 //test dat hang
 router.post("/test", validOrder, async (req, res) => {
   const errors = myValidationResult(req);
@@ -122,7 +134,7 @@ router.put(
   async (req, res) => {
     const { status } = req.body;
     const { id } = req.params;
-    const isOrder = Order.findOne({ _id: id });
+    const isOrder = await Order.findOne({ _id: id });
     if (!isOrder)
       return res
         .status(200)
@@ -274,7 +286,7 @@ router.post("/thongkesanpham", async (req, res) => {
           as: "product_docs",
         },
       },
-      
+
       // {
       //   $group: {
       //     _id: {
@@ -294,20 +306,22 @@ router.post("/thongkesanpham", async (req, res) => {
       // },
     ]);
 
-    let date = temp.map(el => el._id.date);
+    let date = temp.map((el) => el._id.date);
     date = [...new Set(date)];
-    date = date.map(el => ({date: el, value: []}));
+    date = date.map((el) => ({ date: el, value: [] }));
     console.log(date);
-    date.forEach(el => {
-      temp.forEach(el2 => {
-        if(el2._id.date === el.date){
-          el.value = [...el.value, {product: el2.product_docs[0], totalQuantity: el2.totalQuantity}]
+    date.forEach((el) => {
+      temp.forEach((el2) => {
+        if (el2._id.date === el.date) {
+          el.value = [
+            ...el.value,
+            { product: el2.product_docs[0], totalQuantity: el2.totalQuantity },
+          ];
         }
-      })
-    })
+      });
+    });
 
     console.log(date);
-    
 
     return res.status(200).json({ success: true, data: date });
   }
