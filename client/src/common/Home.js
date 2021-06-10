@@ -18,16 +18,6 @@ const Home = (props) => {
         </div>
         <div className="">
           <p className="py-2 px-2 rounded-md ">
-            <i class="fas fa-pager pr-2"></i>page
-          </p>
-          <ul className="text-sm pl-6">
-            <li className="hover:">home</li>
-            <li>new feed</li>
-            <li>about us</li>
-          </ul>
-        </div>
-        <div className="">
-          <p className="py-2 px-2 rounded-md ">
             <i class="fas fa-pager pr-2"></i>e-commerce
           </p>
           <ul className="text-sm pl-6">
@@ -35,16 +25,6 @@ const Home = (props) => {
             <li><Link to="/admin/categories/">Category</Link></li>
             <li><Link to="/admin/orders/">orders</Link></li>
           </ul>
-        </div>
-        <div>
-          <p className="py-2 px-2 rounded-md ">
-            <i class="fas fa-pager pr-2"></i>customer
-          </p>
-        </div>
-        <div>
-          <p className="py-2 px-2 rounded-md ">
-            <i class="fas fa-pager pr-2"></i>message
-          </p>
         </div>
       </div>
     </div>
