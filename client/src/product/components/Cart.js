@@ -75,11 +75,6 @@ const Cart = ({ cart }) => {
           <p>Tổng {getTotalAmountCart(cart)} món</p>
           <p className="text-red-700">{getTotalPriceCart(cart)} vnd</p>
         </div>
-        <Link to="/thanh-toan">
-          <button className="block w-full font-medium uppercase py-2 px-4 bg-red-700 text-white rounded-md">
-            Đặt hàng
-          </button>
-        </Link>
       </div>
     </div>
   );

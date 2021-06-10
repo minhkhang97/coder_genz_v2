@@ -139,7 +139,7 @@ router.put(
   }
 );
 
-router.get("/thongkedoanhso", async (req, res) => {
+router.post("/thongkedoanhso", async (req, res) => {
   //
 
   //start: thoi gian bat dau
@@ -147,123 +147,170 @@ router.get("/thongkedoanhso", async (req, res) => {
   //type: tieu chi thong ke(theo ngay, theo thang, theo nam)
   const { start, end, type } = req.body;
 
-  //thong ke theo ngay
-  const day = await Order.aggregate([
-    {
-      $group: {
-        _id: { $dateToString: { format: "%Y-%m-%d", date: "$create_at" } },
-        total: { $sum: "$totalPrice" },
+  if (type === "day") {
+    const day = await Order.aggregate([
+      {
+        $project: {
+          date: { $dateToString: { format: "%Y-%m-%d", date: "$create_at" } },
+          totalPrice: 1,
+        },
       },
-    },
-  ]);
-  const month = await Order.aggregate([
-    {
-      $group: {
-        _id: { $dateToString: { format: "%Y-%m", date: "$create_at" } },
-        total: { $sum: "$totalPrice" },
+      {
+        $match: {
+          date: { $gte: start, $lte: end },
+        },
       },
-    },
-  ]);
-  const year = await Order.aggregate([
-    {
-      $group: {
-        _id: { $dateToString: { format: "%Y", date: "$create_at" } },
-        total: { $sum: "$totalPrice" },
+      {
+        $group: {
+          _id: "$date",
+          total: { $sum: "$totalPrice" },
+        },
       },
-    },
-  ]);
-  console.log(day, month, year);
-  return res.status(200).json({success: true, data: day});
+    ]);
+    return res.status(200).json({ success: true, data: day });
+  }
+  if (type === "month") {
+    const month = await Order.aggregate([
+      {
+        $project: {
+          date: { $dateToString: { format: "%Y-%m", date: "$create_at" } },
+          totalPrice: 1,
+        },
+      },
+      {
+        $match: {
+          date: { $gte: start, $lte: end },
+        },
+      },
+      {
+        $group: {
+          _id: "$date",
+          total: { $sum: "$totalPrice" },
+        },
+      },
+    ]);
+    return res.status(200).json({ success: true, data: month });
+  }
+  if (type === "year") {
+    const year = await Order.aggregate([
+      {
+        $project: {
+          date: { $dateToString: { format: "%Y", date: "$create_at" } },
+          totalPrice: 1,
+        },
+      },
+      {
+        $match: {
+          date: { $gte: start, $lte: end },
+        },
+      },
+      {
+        $group: {
+          _id: "$date",
+          total: { $sum: "$totalPrice" },
+        },
+      },
+    ]);
+    return res.status(200).json({ success: true, data: year });
+  }
 });
 
 //thong ke theo so luong san pham
 //phan nay co ve kho ne
 
 //dung roi ne, perfe
-router.get("/thongkesanpham", async (req, res) => {
-  const temp = await Order.aggregate([
-    {
-      $project: {
-        order_details: 1,
-        _id: false,
-        create_at: 1,
-      },
-    },
-    {
-      $unwind: "$order_details",
-    },
-    {
-      $addFields: {
-        "order_details.create_at": "$create_at",
-      },
-    },
+router.post("/thongkesanpham", async (req, res) => {
+  const { start, end, type } = req.body;
 
-    {
-      $replaceRoot: {
-        newRoot: "$order_details",
-      },
-    },
-    {
-      $group: {
-        _id: {
-          date: { $dateToString: { format: "%Y-%m-%d", date: "$create_at" } },
-          product: "$product",
+  if (type === "day") {
+    const temp = await Order.aggregate([
+      {
+        $project: {
+          order_details: 1,
+          _id: false,
+          create_at: 1,
         },
-        totalQuantity: { $sum: "$quantity" },
       },
-    },
-    {
-      $lookup: {
-        from: "products",
-        localField: "_id.product",
-        foreignField: "_id",
-        as: "product_docs",
+      {
+        $unwind: "$order_details",
       },
-    },
-  ]);
-
-  const temp2 = await Order.aggregate([
-    {
-      $unwind: "$order_details",
-    },
-    {
-      $addFields: {
-        "order_details.create_at": "$create_at",
+      {
+        $addFields: {
+          "order_details.create_at": "$create_at",
+        },
       },
-    },
 
-    {
-      $replaceRoot: {
-        newRoot: "$order_details",
+      {
+        $replaceRoot: {
+          newRoot: "$order_details",
+        },
       },
-    },
-    {
-      $lookup: {
-        from: "product",
-        localField: "product",
-        foreignField: "_id",
-        as: "product_doc",
+      {
+        $project: {
+          product: 1,
+          date: { $dateToString: { format: "%Y-%m-%d", date: "$create_at" } },
+          quantity: 1,
+        },
       },
-    },
-  ]);
+      {
+        $match: {
+          date: { $gte: start, $lte: end },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            date: "$date",
+            product: "$product",
+          },
+          totalQuantity: { $sum: "$quantity" },
+        },
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "_id.product",
+          foreignField: "_id",
+          as: "product_docs",
+        },
+      },
+      
+      // {
+      //   $group: {
+      //     _id: {
+      //       date: { $dateToString: { format: "%Y-%m-%d", date: "$create_at" } },
+      //       product: "$product",
+      //     },
+      //     totalQuantity: { $sum: "$quantity" },
+      //   },
+      // },
+      // {
+      //   $lookup: {
+      //     from: "products",
+      //     localField: "_id.product",
+      //     foreignField: "_id",
+      //     as: "product_docs",
+      //   },
+      // },
+    ]);
 
-  // const t2 = temp.map(el => el.order_details).flat();
-  // console.log(t2);
-  res.json(temp);
-});
+    let date = temp.map(el => el._id.date);
+    date = [...new Set(date)];
+    date = date.map(el => ({date: el, value: []}));
+    console.log(date);
+    date.forEach(el => {
+      temp.forEach(el2 => {
+        if(el2._id.date === el.date){
+          el.value = [...el.value, {product: el2.product_docs[0], totalQuantity: el2.totalQuantity}]
+        }
+      })
+    })
 
-//su dung voi cai order detail
-router.get("/thongke2", async (req, res) => {
-  const temp = await OrderDetail.aggregate([{
-    $lookup: {
-      from: 'products',
-      localField: 'product',
-      foreignField: '_id',
-      as: 'product_doc'
-    }
-  }])
+    console.log(date);
+    
 
-  return res.json(temp);
+    return res.status(200).json({ success: true, data: date });
+  }
 });
 
 module.exports = router;

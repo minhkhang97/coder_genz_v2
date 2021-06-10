@@ -12,8 +12,9 @@ const ThanhToanPage = () => {
   const [phone, setPhone] = useState("");
   const [noti, setNoti] = useState([]);
   return (
-    <div>
-      <div className="flex">
+    <div className="bg-red-100">
+      <div className="w-4/5 m-auto">
+      <div className="flex bg-white p-4 rounded-lg">
         {noti.length > 0 && (
           <div className="bg-white fixed inset-x-1/2 w-1/4 p-6 rounded-md shadow-md text-center">
             {noti.map((el) => (
@@ -27,34 +28,44 @@ const ThanhToanPage = () => {
             </button>
           </div>
         )}
-        <div>
+        <div className="w-1/2 mr-8">
           <p>xác nhận thông tin</p>
           <div>
-            <input
-              type="text"
-              placeholder="ho va ten"
-              value={fullname}
-              onChange={(e) => setFullname(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="so dien thoai"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="ho va ten"
-              value={specific_address}
-              onChange={(e) => setSpecificAddress(e.target.value)}
-            />
+            <label className="my-2 font-medium flex-col flex">
+              Họ và tên
+              <input
+                className="border border-gray-300 border-solid rounded-md px-3"
+                type="text"
+                value={fullname}
+                onChange={(e) => setFullname(e.target.value)}
+              />
+            </label>
+            <label className="my-2 font-medium flex-col flex">
+              Số điện thoại
+              <input
+                className="border border-gray-300 border-solid rounded-md px-3"
+                type="text"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+            </label>
+            <label className="my-2 font-medium flex-col flex">
+              Địa chỉ
+              <input
+                className="border border-gray-300 border-solid rounded-md px-3"
+                type="text"
+                value={specific_address}
+                onChange={(e) => setSpecificAddress(e.target.value)}
+              />
+            </label>
           </div>
         </div>
-        <div>
+        <div className="w-1/2 ml-8">
           <Cart cart={cart} />
         </div>
       </div>
       <button
+      className="my-4 bg-red-700 text-white rounded-md shadow-md py-2 px-6 font-medium uppercase text-sm"
         onClick={async () => {
           if (cart.length < 1) {
             setNoti(["vui lòng thêm sản phẩm vào giỏ hàng"]);
@@ -75,8 +86,9 @@ const ThanhToanPage = () => {
           }
         }}
       >
-        xac nhan don hang
+        xác nhận đơn hàng
       </button>
+      </div>
     </div>
   );
 };

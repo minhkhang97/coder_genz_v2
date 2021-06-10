@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import shortid from "shortid";
+import { Link } from "react-router-dom";
 import { fetchAllCategories } from "../../category/slice/categoriesSlice";
 import Cart from "../components/Cart";
-import {
-  addCart,
-  minusAmountOrder,
-  plusAmountOrder,
-  removeOrder,
-} from "../slice/cartSlice";
+import { addCart } from "../slice/cartSlice";
 import {
   minusAmountForOrderDetail,
   minusAmountValueOfProperty,
@@ -17,7 +13,6 @@ import {
   setInitOrderDetail,
 } from "../slice/orderDetailSlice";
 import { setValueOfProperty } from "../slice/orderDetailSlice";
-import { fetchProducts } from "../slice/productsSlice";
 
 const DatMonPage = () => {
   const { status, categories } = useSelector(
@@ -90,7 +85,11 @@ const DatMonPage = () => {
           <div className="rounded-lg fixed inset-x-1/4 top-6 py-6 px-4 w-1/2 bg-white">
             {error.length > 0 && (
               <div className="py-1 fixed inset-x-1/3 top-16 w-1/3 px-2 bg-red-700 text-white rounded-md shadow-md inline-block">
-                {error.map((el, index) => <p className="font-medium" key={index}>{el}</p>)}
+                {error.map((el, index) => (
+                  <p className="font-medium" key={index}>
+                    {el}
+                  </p>
+                ))}
               </div>
             )}
             <div className="flex py-2 px-6">
@@ -216,13 +215,13 @@ const DatMonPage = () => {
                   console.log(valueCurrent);
                   if (equar(valueCurrent, valueRequire)) {
                     console.log("dung");
-                      dispatch(
+                    dispatch(
                       addCart({ ...orderDetail, id: shortid.generate() })
                     );
                     setShowProduct(false);
                   } else {
                     console.log("sai");
-                    setError([...error, 'thêm sản phẩm không thành công'])
+                    setError([...error, "thêm sản phẩm không thành công"]);
                   }
                   // if (!temp.includes(0)) {
                   //   dispatch(
@@ -245,7 +244,12 @@ const DatMonPage = () => {
               </div>
             </div>
 
-            <button className="text-red-700" onClick={() => setShowProduct(false)}>tắt</button>
+            <button
+              className="text-red-700"
+              onClick={() => setShowProduct(false)}
+            >
+              tắt
+            </button>
           </div>
         </div>
       )}
@@ -322,6 +326,11 @@ const DatMonPage = () => {
         </div>
         <div className="W-3/12 flex-grow bg-white rounded-md py-4 px-2 shadow-md">
           <Cart cart={cart} />
+          <Link to="/thanh-toan">
+            <button className="block w-full font-medium uppercase py-2 px-4 bg-red-700 text-white rounded-md">
+              Đặt hàng
+            </button>
+          </Link>
         </div>
       </div>
     </div>
