@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import apiHandler from "../api/apiHandler";
+import {useDispatch } from 'react-redux';
+import { fetchCustomer } from "../customer/slice/customerSlice";
 
 const Header = () => {
   const [isRegister, setRegister] = useState(false);
@@ -11,6 +13,7 @@ const Header = () => {
 
   const [noti, setNoti] = useState([]);
 
+  const dispatch = useDispatch();
   return (
     <div>
       {/* khi chua danh nhap */}
@@ -127,6 +130,7 @@ const Header = () => {
                   setNoti([res.error]);
                 } else {
                   localStorage.setItem("accessToken", res.token.accessToken);
+                  await dispatch(fetchCustomer());
                 }
               }}
             >

@@ -18,17 +18,24 @@ const MenuPage = () => {
   useEffect(() => {
     (async () => {
       await dispatch(fetchAllCategories());
-      const res = await dispatch(fetchCustomer());
-      const data = unwrapResult(res);
-      console.log(data);
+      // await dispatch(fetchCustomer());
     })();
-  }, []);
+  }, [dispatch]);
 
-  if (status === "loading" | customerReducer.status === 'loading') return <h1>loading</h1>;
+  if (status === "loading" || customerReducer.status === "loading")
+    return <h1>loading</h1>;
   if (status === "failed") return <h1>failed</h1>;
   return (
     <div className="bg-red-50">
-      {customerReducer.status === 'success' ? <Header /> : <div>dang nhap thanh cong</div>}
+      {customerReducer.status === "success" ? (
+        <div>
+          <Link to="/customer">
+            <p>{customerReducer.customer.email}</p>
+          </Link>
+        </div>
+      ) : (
+        <Header />
+      )}
       <div className="py-6">
         <h1 className="text-4xl uppercase font-semibold text-gray-900 text-center">
           Thực đơn sườn nướng

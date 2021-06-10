@@ -113,18 +113,6 @@ const ChartPage = () => {
                 type: tieuChi2,
               });
               const data = res.data;
-              console.log(data);
-              let result = [];
-              data.forEach((element) => {
-                let temp = {};
-                temp.name = element.date;
-                element.value.forEach((el) => {
-                  temp[el.product.name] = el.totalQuantity;
-                });
-
-                result = [...result, temp];
-              });
-              console.log(result);
               setSlsp(data);
             }}
           >

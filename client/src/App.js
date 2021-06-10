@@ -16,6 +16,7 @@ import ThanhToanPage from "./product/pages/ThanhToanPage";
 import ForgetPassword from "./common/ForgetPassword";
 import MenuPage from "./product/pages/MenuPage";
 import ProductPage from "./product/pages/ProductPage";
+import CustomerInfoPage from "./customer/pages/CustomerInfoPage";
 
 const App = () => {
   return (
@@ -28,6 +29,7 @@ const App = () => {
         <Route path="/forget-password" component={ForgetPassword} />
         <Route path="/menu" exact component={MenuPage} />
         <Route path="/menu/:id" exact component={ProductPage} />
+        <Route path="/customer" component={CustomerInfoPage} />
       </Switch>
     </Router>
   );

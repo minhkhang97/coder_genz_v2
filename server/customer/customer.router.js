@@ -76,8 +76,8 @@ router.post("/login", loginValid, async (req, res) => {
     return res.status(200).json({ token: { accessToken, refreshToken }, success: true });
   } catch {
     return res
-      .status(200)
-      .json({ error: ["đăng ký thông thành công, vui lòng thử lại"], success: false });
+      .status(403)
+      .json({ error: ["khong the dang nhap"], success: false });
   }
 });
 
