@@ -22,7 +22,7 @@ router.post("/register", registerValid, async (req, res) => {
   if (!errors.isEmpty()) {
     const t = errors.array();
     console.log(t);
-    return res.status(200).json({ error: errors.array().map((el) => el.mess) });
+    return res.status(200).json({ error: errors.array().map((el) => el.mess), success: false });
   }
 
   const { email, password } = req.body;
@@ -55,14 +55,14 @@ router.post("/login", loginValid, async (req, res) => {
   if (!errors.isEmpty()) {
     const t = errors.array();
     console.log(t);
-    return res.status(200).json({ error: errors.array().map((el) => el.mess) });
+    return res.status(200).json({ error: errors.array().map((el) => el.mess), success: false });
   }
   const { email, password } = req.body;
 
   try {
     const customer = await Customer.findOne({ email });
     if (!customer) {
-      return res.status(200).json({ error: ["tài khoản không chính xác"] });
+      return res.status(200).json({ error: ["tài khoản không chính xác"], success: false });
     }
 
     //kiem tra mat khau
@@ -73,15 +73,15 @@ router.post("/login", loginValid, async (req, res) => {
     const accessToken = jwt.sign({ sub: customer._id }, process.env.SECRET_1);
     const refreshToken = jwt.sign({ sub: customer._id }, process.env.SECRET_2);
 
-    return res.status(200).json({ token: { accessToken, refreshToken } });
+    return res.status(200).json({ token: { accessToken, refreshToken }, success: true });
   } catch {
     return res
       .status(200)
-      .json({ error: ["đăng ký thông thành công, vui lòng thử lại"] });
+      .json({ error: ["đăng ký thông thành công, vui lòng thử lại"], success: false });
   }
 });
 
-router.post("/read", async (req, res) => {
+router.get("/read", async (req, res) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   if (token) {
