@@ -5,7 +5,7 @@ const registerValid = [
     check('email').exists().withMessage('vui lòng nhập email'),
     check('email').isEmail().withMessage('địa chỉ email không hợp lệ'),
     check('password').exists().withMessage('vui lòng nhập mật khẩu'),
-    check('password').isLength({min: 8, max: 30}).withMessage('độ dài mật khẩu quá ngắn'),
+    check('password').isLength({min: 5, max: 30}).withMessage('độ dài mật khẩu quá ngắn'),
     check('passwordConfiguration').exists().withMessage('vui long nhap mat khau xac nhan'),
     check('passwordConfiguration').isLength({min: 8, max: 30}).withMessage('do dai mat khau xac nhan khong dung'),
     check('passwordConfiguration').custom((value, {req}) => {
@@ -19,7 +19,7 @@ const loginValid = [
     check('email').exists().withMessage('vui lòng nhập email'),
     check('email').isEmail().withMessage('địa chỉ email không hợp lệ'),
     check('password').exists().withMessage('vui lòng nhập mật khẩu'),
-    check('password').isLength({min: 8, max: 30}).withMessage('độ dài mật khẩu không đúng'),
+    check('password').isLength({min: 5, max: 30}).withMessage('độ dài mật khẩu không đúng'),
 ];
 
 const validProduct = [
