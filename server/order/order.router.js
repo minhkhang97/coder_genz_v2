@@ -325,6 +325,189 @@ router.post("/thongkesanpham", async (req, res) => {
 
     return res.status(200).json({ success: true, data: date });
   }
+
+  if (type === "month") {
+    const temp = await Order.aggregate([
+      {
+        $project: {
+          order_details: 1,
+          _id: false,
+          create_at: 1,
+        },
+      },
+      {
+        $unwind: "$order_details",
+      },
+      {
+        $addFields: {
+          "order_details.create_at": "$create_at",
+        },
+      },
+
+      {
+        $replaceRoot: {
+          newRoot: "$order_details",
+        },
+      },
+      {
+        $project: {
+          product: 1,
+          date: { $dateToString: { format: "%Y-%m", date: "$create_at" } },
+          quantity: 1,
+        },
+      },
+      {
+        $match: {
+          date: { $gte: start, $lte: end },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            date: "$date",
+            product: "$product",
+          },
+          totalQuantity: { $sum: "$quantity" },
+        },
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "_id.product",
+          foreignField: "_id",
+          as: "product_docs",
+        },
+      },
+
+      // {
+      //   $group: {
+      //     _id: {
+      //       date: { $dateToString: { format: "%Y-%m-%d", date: "$create_at" } },
+      //       product: "$product",
+      //     },
+      //     totalQuantity: { $sum: "$quantity" },
+      //   },
+      // },
+      // {
+      //   $lookup: {
+      //     from: "products",
+      //     localField: "_id.product",
+      //     foreignField: "_id",
+      //     as: "product_docs",
+      //   },
+      // },
+    ]);
+
+    let date = temp.map((el) => el._id.date);
+    date = [...new Set(date)];
+    date = date.map((el) => ({ date: el, value: [] }));
+    console.log(date);
+    date.forEach((el) => {
+      temp.forEach((el2) => {
+        if (el2._id.date === el.date) {
+          el.value = [
+            ...el.value,
+            { product: el2.product_docs[0], totalQuantity: el2.totalQuantity },
+          ];
+        }
+      });
+    });
+
+    console.log(date);
+
+    return res.status(200).json({ success: true, data: date });
+  }
+  if (type === "year") {
+    const temp = await Order.aggregate([
+      {
+        $project: {
+          order_details: 1,
+          _id: false,
+          create_at: 1,
+        },
+      },
+      {
+        $unwind: "$order_details",
+      },
+      {
+        $addFields: {
+          "order_details.create_at": "$create_at",
+        },
+      },
+
+      {
+        $replaceRoot: {
+          newRoot: "$order_details",
+        },
+      },
+      {
+        $project: {
+          product: 1,
+          date: { $dateToString: { format: "%Y", date: "$create_at" } },
+          quantity: 1,
+        },
+      },
+      {
+        $match: {
+          date: { $gte: start, $lte: end },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            date: "$date",
+            product: "$product",
+          },
+          totalQuantity: { $sum: "$quantity" },
+        },
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "_id.product",
+          foreignField: "_id",
+          as: "product_docs",
+        },
+      },
+
+      // {
+      //   $group: {
+      //     _id: {
+      //       date: { $dateToString: { format: "%Y-%m-%d", date: "$create_at" } },
+      //       product: "$product",
+      //     },
+      //     totalQuantity: { $sum: "$quantity" },
+      //   },
+      // },
+      // {
+      //   $lookup: {
+      //     from: "products",
+      //     localField: "_id.product",
+      //     foreignField: "_id",
+      //     as: "product_docs",
+      //   },
+      // },
+    ]);
+
+    let date = temp.map((el) => el._id.date);
+    date = [...new Set(date)];
+    date = date.map((el) => ({ date: el, value: [] }));
+    console.log(date);
+    date.forEach((el) => {
+      temp.forEach((el2) => {
+        if (el2._id.date === el.date) {
+          el.value = [
+            ...el.value,
+            { product: el2.product_docs[0], totalQuantity: el2.totalQuantity },
+          ];
+        }
+      });
+    });
+
+    console.log(date);
+
+    return res.status(200).json({ success: true, data: date });
+  }
 });
 
 module.exports = router;
